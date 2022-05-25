@@ -24,17 +24,17 @@ class ArduinoNunchuk {
 
     void init();
     void update();
-    void connected();
+    bool connected();
 
-    int stickX();
-    int stickY();
+    uint8_t stickX();
+    uint8_t stickY();
 
-    int accelX();
-    int accelY();
-    int accelZ();
+    uint16_t accelX();
+    uint16_t accelY();
+    uint16_t accelZ();
 
-    int buttonZ();
-    int buttonC();
+    bool buttonZ();
+    bool buttonC();
 
   private:
     const uint8_t NUNCHUK_ADDRESS = 0x52;
