@@ -24,7 +24,7 @@ class ArduinoNunchuk {
     ~ArduinoNunchuk();
 
     bool init();
-    void update();
+    bool update();
     bool connected();
 
     uint8_t stickX();

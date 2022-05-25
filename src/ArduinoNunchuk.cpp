@@ -40,8 +40,8 @@ bool ArduinoNunchuk::init() {
     return _connected;
 }
 
-void ArduinoNunchuk::update() {
-    _receiveBytes(0x00, _report, 6);
+bool ArduinoNunchuk::update() {
+    return _receiveBytes(0x00, _report, 6);
 }
 
 bool ArduinoNunchuk::connected() {
