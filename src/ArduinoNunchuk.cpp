@@ -25,13 +25,19 @@ ArduinoNunchuk::~ArduinoNunchuk() {
     _wire.end();
 }
 
-void ArduinoNunchuk::init() {
-    _sendByte(0xF0, 0x55);
-    _sendByte(0xFB, 0x00);
+bool ArduinoNunchuk::init() {
+    if (!_sendByte(0xF0, 0x55))
+        return false;
 
-    update();
+    delay(10);
+
+    if (!_sendByte(0xFB, 0x00))
+        return false;
+
+    delay(20);
 
     _connected = true;
+    return _connected;
 }
 
 void ArduinoNunchuk::update() {
@@ -70,16 +76,16 @@ bool ArduinoNunchuk::buttonC() {
     return !((_report[5] >> 1) & 0x01);
 }
 
-void ArduinoNunchuk::_sendByte(uint8_t location, uint8_t data) {
+bool ArduinoNunchuk::_sendByte(uint8_t location, uint8_t data) {
     _wire.beginTransmission(NUNCHUK_ADDRESS);
 
     _wire.write(location);
     _wire.write(data);
 
-    _wire.endTransmission();
+    return _wire.endTransmission() == 0;
 }
 
-void ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t length) {
+bool ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t length) {
     // Send the location we want to read from.
     _wire.beginTransmission(NUNCHUK_ADDRESS);
     _wire.write(location);
@@ -91,8 +97,10 @@ void ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t lengt
     // Request to read a certain number of bytes from that location.
     _wire.requestFrom(NUNCHUK_ADDRESS, length);
 
-    // Read requested number of bytes into
+    // Read requested number of bytes into buffer.
     for (int i = 0; i < length && _wire.available(); i++) {
-        _report[i] = _wire.read();
+        buf[i] = _wire.read();
     }
+
+    return i == length;
 }

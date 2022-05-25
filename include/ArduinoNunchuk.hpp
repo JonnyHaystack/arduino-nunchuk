@@ -23,7 +23,7 @@ class ArduinoNunchuk {
     ArduinoNunchuk(TwoWire &wire);
     ~ArduinoNunchuk();
 
-    void init();
+    bool init();
     void update();
     bool connected();
 
@@ -44,8 +44,8 @@ class ArduinoNunchuk {
     TwoWire &_wire;
     bool _connected = false;
     uint8_t _report[6] = { 0 };
-    void _sendByte(uint8_t location, uint8_t data);
-    void _receiveBytes(uint8_t location, uint8_t *buf, uint8_t length);
+    bool _sendByte(uint8_t location, uint8_t data);
+    bool _receiveBytes(uint8_t location, uint8_t *buf, uint8_t length);
 };
 
 #endif
