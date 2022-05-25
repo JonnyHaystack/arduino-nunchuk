@@ -16,6 +16,7 @@
 #define ArduinoNunchuk_H
 
 #include <Arduino.h>
+#include <Wire.h>
 
 class ArduinoNunchuk {
   public:
