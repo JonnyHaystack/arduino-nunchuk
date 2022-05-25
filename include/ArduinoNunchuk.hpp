@@ -19,7 +19,7 @@
 
 class ArduinoNunchuk {
   public:
-    ArduinoNunchuk();
+    ArduinoNunchuk(TwoWire &wire);
     ~ArduinoNunchuk();
 
     void init();
@@ -40,6 +40,7 @@ class ArduinoNunchuk {
     const uint8_t NUNCHUK_ADDRESS = 0x52;
     const uint16_t CONVERSION_DELAY_US = 175;
 
+    TwoWire &_wire;
     bool _connected = false;
     uint8_t _report[6] = { 0 };
     void _sendByte(uint8_t location, uint8_t data);
