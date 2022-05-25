@@ -17,22 +17,33 @@
 
 #include <Arduino.h>
 
-class ArduinoNunchuk
-{
+class ArduinoNunchuk {
   public:
-    int analogX;
-    int analogY;
-    int accelX;
-    int accelY;
-    int accelZ;
-    int zButton;
-    int cButton;
+    ArduinoNunchuk();
+    ~ArduinoNunchuk();
 
     void init();
     void update();
+    void connected();
+
+    int stickX();
+    int stickY();
+
+    int accelX();
+    int accelY();
+    int accelZ();
+
+    int buttonZ();
+    int buttonC();
 
   private:
-    void _sendByte(byte data, byte location);
+    const uint8_t NUNCHUK_ADDRESS = 0x52;
+    const uint16_t CONVERSION_DELAY_US = 175;
+
+    bool _connected = false;
+    uint8_t _report[6] = { 0 };
+    void _sendByte(uint8_t location, uint8_t data);
+    void _receiveBytes(uint8_t location, uint8_t *buf, uint8_t length);
 };
 
 #endif
