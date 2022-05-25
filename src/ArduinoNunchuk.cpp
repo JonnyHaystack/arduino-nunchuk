@@ -98,9 +98,10 @@ bool ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t lengt
     _wire.requestFrom(NUNCHUK_ADDRESS, length);
 
     // Read requested number of bytes into buffer.
-    for (int i = 0; i < length && _wire.available(); i++) {
-        buf[i] = _wire.read();
+    int received;
+    for (received = 0; received < length && _wire.available(); received++) {
+        buf[received] = _wire.read();
     }
 
-    return i == length;
+    return received == length;
 }
