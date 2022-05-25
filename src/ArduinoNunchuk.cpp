@@ -93,7 +93,6 @@ void ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t lengt
 
     // Read requested number of bytes into
     for (int i = 0; i < length && Wire.available(); i++) {
-        _data[i] = Wire.read();
-        received++;
+        _report[i] = Wire.read();
     }
 }
