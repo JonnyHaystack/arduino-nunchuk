@@ -17,6 +17,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#ifdef PICO_SDK_VERSION_STRING
+#include <hardware/timer.h>
+#define DELAY_US(x) busy_wait_us(x)
+#define DELAY_MS(x) busy_wait_ms(x)
+#else
+#define DELAY_US(x) delayMicroseconds(x)
+#define DELAY_MS(x) delay(x)
+#endif
+
 ArduinoNunchuk::ArduinoNunchuk(TwoWire &wire) : _wire(wire) {
     _wire.begin();
 }
@@ -29,12 +38,12 @@ bool ArduinoNunchuk::init() {
     if (!_sendByte(0xF0, 0x55))
         return false;
 
-    delay(10);
+    DELAY_MS(10);
 
     if (!_sendByte(0xFB, 0x00))
         return false;
 
-    delay(20);
+    DELAY_MS(20);
 
     _connected = true;
     return _connected;
@@ -92,7 +101,7 @@ bool ArduinoNunchuk::_receiveBytes(uint8_t location, uint8_t *buf, uint8_t lengt
     _wire.endTransmission();
 
     // Conversion delay.
-    delayMicroseconds(CONVERSION_DELAY_US);
+    DELAY_US(CONVERSION_DELAY_US);
 
     // Request to read a certain number of bytes from that location.
     _wire.requestFrom(NUNCHUK_ADDRESS, length);
